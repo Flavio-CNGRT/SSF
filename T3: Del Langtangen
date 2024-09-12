@@ -1,0 +1,366 @@
+#Ejercicio A2
+#(a)
+import numpy as np
+import matplotlib.pyplot as plt
+from numpy.polynomial.legendre import leggauss
+
+def f(x, epsilon):
+    return np.sin(1 / (x + epsilon))
+
+def plot_function(n, epsilon):
+    nodes, weights = leggauss(n)
+    
+    nodes = 0.5 * (nodes + 1)
+    
+    y_values = f(nodes, epsilon)
+    
+    plt.plot(nodes, y_values, label=f"n={n}, epsilon={epsilon}")
+    plt.xlabel("x")
+    plt.ylabel("f(x)")
+    plt.title(f"Plot of f(x) with n={n} and epsilon={epsilon}")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+n = 10
+epsilon = 1 / 5
+
+plot_function(n, epsilon)
+
+plot_function(n + 10, epsilon)
+
+#(b)
+def plot_multiple_functions(n, epsilon):
+    n_values = [n, n + 10]
+    
+    for n_val in n_values:
+        nodes, weights = leggauss(n_val)
+        
+        nodes = 0.5 * (nodes + 1)
+        
+        y_values = f(nodes, epsilon)
+        
+        plt.plot(nodes, y_values, label=f"n={n_val}")
+    
+    plt.xlabel("x")
+    plt.ylabel("f(x)")
+    plt.title(f"Comparison of f(x) for n and n+10 with epsilon={epsilon}")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+n = 10
+epsilon = 1 / 5
+
+plot_multiple_functions(n, epsilon)
+
+#(c)
+def find_n_for_difference(epsilon, tolerance=0.1):
+    n = 10
+    max_diff = np.inf
+    
+    while max_diff > tolerance:
+        nodes_n, _ = leggauss(n)
+        nodes_n_plus_10, _ = leggauss(n + 10)
+        
+        nodes_n = 0.5 * (nodes_n + 1)
+        nodes_n_plus_10 = 0.5 * (nodes_n_plus_10 + 1)
+        
+        y_n = f(nodes_n, epsilon)
+        y_n_plus_10 = f(nodes_n_plus_10, epsilon)
+        
+        max_diff = np.max(np.abs(y_n - y_n_plus_10[:len(y_n)]))
+        
+        print(f"n={n}, max_diff={max_diff}")
+        
+        if max_diff > tolerance:
+            n += 1
+    
+    print(f"Valor encontrado de n: {n}")
+    return n
+
+epsilon = 1 / 5
+tolerance = 0.1
+
+n_final = find_n_for_difference(epsilon, tolerance)
+
+#(d)
+def find_n_for_difference(epsilon, tolerance=0.1):
+    n = 10
+    max_diff = np.inf
+    
+    while max_diff > tolerance:
+        nodes_n, _ = leggauss(n)
+        nodes_n_plus_10, _ = leggauss(n + 10)
+        
+        nodes_n = 0.5 * (nodes_n + 1)
+        nodes_n_plus_10 = 0.5 * (nodes_n_plus_10 + 1)
+        
+        y_n = f(nodes_n, epsilon)
+        y_n_plus_10 = f(nodes_n_plus_10, epsilon)
+        
+        max_diff = np.max(np.abs(y_n - y_n_plus_10[:len(y_n)]))
+        
+        print(f"n={n}, max_diff={max_diff}")
+        
+        if max_diff > tolerance:
+            n += 1
+    
+    print(f"Valor encontrado de n: {n}")
+    return n
+    
+epsilon = 1 / 10
+n_final_1_10 = find_n_for_difference(epsilon, tolerance)
+
+#(e)
+def find_n_for_difference(epsilon, tolerance=0.1):
+    n = 10
+    max_diff = np.inf
+    
+    while max_diff > tolerance:
+        nodes_n, _ = leggauss(n)
+        nodes_n_plus_10, _ = leggauss(n + 10)
+        
+        nodes_n = 0.5 * (nodes_n + 1)
+        nodes_n_plus_10 = 0.5 * (nodes_n_plus_10 + 1)
+        
+        y_n = f(nodes_n, epsilon)
+        y_n_plus_10 = f(nodes_n_plus_10, epsilon)
+        
+        max_diff = np.max(np.abs(y_n - y_n_plus_10[:len(y_n)]))
+        
+        print(f"n={n}, max_diff={max_diff}")
+        
+        if max_diff > tolerance:
+            n += 1
+    
+    print(f"Valor encontrado de n: {n}")
+    return n
+
+epsilon = 1 / 20
+n_final_1_20 = find_n_for_difference(epsilon, tolerance)
+
+
+
+
+
+#Ejercicio A3
+#(a)
+import numpy as np
+import matplotlib.pyplot as plt
+from numpy.polynomial.legendre import leggauss
+
+def f(x, epsilon):
+    return np.sin(1 / (x + epsilon))
+
+def exact_derivative(x, epsilon):
+    return -np.cos(1 / (x + epsilon)) / (x + epsilon)**2
+
+def numerical_derivative(x, epsilon, h=1e-5):
+    return (f(x + h, epsilon) - f(x - h, epsilon)) / (2 * h)
+
+def plot_derivatives(n, epsilon):
+    nodes, _ = leggauss(n)
+    
+    nodes = 0.5 * (nodes + 1)
+    
+    exact_values = exact_derivative(nodes, epsilon)
+    
+    numerical_values = numerical_derivative(nodes, epsilon)
+    
+    plt.plot(nodes, exact_values, label="Exact Derivative", linestyle='--')
+    plt.plot(nodes, numerical_values, label="Numerical Derivative", linestyle=':')
+    plt.xlabel("x")
+    plt.ylabel("f'(x)")
+    plt.title(f"Comparison of Derivatives for n={n} and epsilon={epsilon}")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+n = 10 #para inciso (b) variar este valor
+epsilon = 1 / 5 #para inciso (b) variar este valor
+
+plot_derivatives(n, epsilon)
+
+#(c)
+def find_n_for_derivative_difference(epsilon, tolerance=0.1, h=1e-5):
+    n = 10
+    max_diff = np.inf
+    
+    while max_diff > tolerance:
+        nodes, _ = leggauss(n)
+        nodes = 0.5 * (nodes + 1) 
+        
+        exact_values = exact_derivative(nodes, epsilon)
+        numerical_values = numerical_derivative(nodes, epsilon, h)
+        
+        max_diff = np.max(np.abs(exact_values - numerical_values))
+        
+        print(f"n={n}, max_diff={max_diff}")
+        
+        if max_diff > tolerance:
+            n += 1
+    
+    print(f"Valor encontrado de n: {n}")
+    return n
+
+epsilon = 1 / 5
+tolerance = 0.1
+
+n_final = find_n_for_derivative_difference(epsilon, tolerance)
+
+#(d)
+def find_n_for_derivative_difference(epsilon, tolerance=0.1, h=1e-5):
+    n = 10
+    max_diff = np.inf
+    
+    while max_diff > tolerance:
+        nodes, _ = leggauss(n)
+        nodes = 0.5 * (nodes + 1) 
+        
+        exact_values = exact_derivative(nodes, epsilon)
+        numerical_values = numerical_derivative(nodes, epsilon, h)
+        
+        max_diff = np.max(np.abs(exact_values - numerical_values))
+        
+        print(f"n={n}, max_diff={max_diff}")
+        
+        if max_diff > tolerance:
+            n += 1
+    
+    print(f"Valor encontrado de n: {n}")
+    return n
+epsilon = 1 / 10
+n_final_1_10 = find_n_for_derivative_difference(epsilon, tolerance)
+
+#(e)
+def find_n_for_derivative_difference(epsilon, tolerance=0.1, h=1e-5):
+    n = 10
+    max_diff = np.inf
+    
+    while max_diff > tolerance:
+        nodes, _ = leggauss(n)
+        nodes = 0.5 * (nodes + 1) 
+        
+        exact_values = exact_derivative(nodes, epsilon)
+        numerical_values = numerical_derivative(nodes, epsilon, h)
+        
+        max_diff = np.max(np.abs(exact_values - numerical_values))
+        
+        print(f"n={n}, max_diff={max_diff}")
+        
+        if max_diff > tolerance:
+            n += 1
+    
+    print(f"Valor encontrado de n: {n}")
+    return n
+
+epsilon = 1 / 20
+n_final_1_20 = find_n_for_derivative_difference(epsilon, tolerance)
+
+#(f)
+epsilon_values = [1/5, 1/10, 1/20, 1/50, 1/100]
+n_values = []
+
+for epsilon in epsilon_values:
+    n_values.append(find_n_for_derivative_difference(epsilon, tolerance))
+
+plt.plot(epsilon_values, n_values, marker='o')
+plt.xlabel("epsilon")
+plt.ylabel("n (number of nodes)")
+plt.title("n vs epsilon")
+plt.grid(True)
+plt.show()
+
+
+
+#Ejercicio A4
+import numpy as np
+from numpy.polynomial.legendre import leggauss
+
+def exact_integral():
+    return (1 / 4) * (np.exp(4) - 1)
+
+def f(x):
+    return np.exp(4 * x)
+
+def gauss_legendre_integration(n):
+    nodes, weights = leggauss(n)
+    
+    nodes = 0.5 * (nodes + 1)
+    
+    weights = 0.5 * weights
+    
+    integral_approx = np.sum(weights * f(nodes))
+    
+    return integral_approx
+
+def find_n_for_tolerance(epsilon):
+    exact_value = exact_integral()
+    n = 2  # Empezamos con 2 nodos
+    diff = np.inf
+    
+    while diff > epsilon:
+        approx_value = gauss_legendre_integration(n)
+        
+        diff = np.abs(exact_value - approx_value)
+        
+        print(f"n = {n}, Aproximación = {approx_value}, Diferencia = {diff}")
+        
+        if diff > epsilon:
+            n += 1
+    
+    print(f"Valor encontrado de n: {n}")
+    return n
+
+epsilon_1 = 1 / 100
+epsilon_2 = 1 / 1000
+epsilon_3 = 1 / 10000
+
+n_1 = find_n_for_tolerance(epsilon_1)
+n_2 = find_n_for_tolerance(epsilon_2)
+n_3 = find_n_for_tolerance(epsilon_3)
+
+
+
+
+
+#Ejercicio A4 (scipy)
+import numpy as np
+from scipy.integrate import fixed_quad
+
+def exact_integral():
+    return (1 / 4) * (np.exp(4) - 1)
+
+def f(x):
+    return np.exp(4 * x)
+
+def scipy_gauss_legendre_integration(n):
+    result, _ = fixed_quad(f, 0, 1, n=n)
+    return result
+
+def find_n_for_tolerance_scipy(epsilon):
+    exact_value = exact_integral()
+    n = 2  
+    diff = np.inf
+    
+    while diff > epsilon:
+        approx_value = scipy_gauss_legendre_integration(n)
+        
+        diff = np.abs(exact_value - approx_value)
+        
+        print(f"n = {n}, Aproximación = {approx_value}, Diferencia = {diff}")
+        
+        if diff > epsilon:
+            n += 1
+    
+    print(f"Valor encontrado de n: {n}")
+    return n
+
+epsilon_1 = 1 / 100
+epsilon_2 = 1 / 1000
+epsilon_3 = 1 / 10000
+
+n_1 = find_n_for_tolerance_scipy(epsilon_1)
+n_2 = find_n_for_tolerance_scipy(epsilon_2)
+n_3 = find_n_for_tolerance_scipy(epsilon_3)
